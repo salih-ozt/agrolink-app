@@ -1,0 +1,3703 @@
+<!doctype html>
+<html lang="tr">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroLink - Modern Sosyal Platform</title>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+
+    *, *::before, *::after {
+      box-sizing: inherit;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    body.light-theme {
+      background: linear-gradient(145deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    }
+
+    body.dark-theme {
+      background: linear-gradient(145deg, #000000 0%, #0a0a0a 50%, #1a1a1a 100%);
+    }
+
+    .app-wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.02);
+      box-shadow: 0 0 80px rgba(16, 185, 129, 0.1);
+    }
+
+    /* Splash Screen - Ultra Modern */
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(145deg, #10b981 0%, #059669 50%, #047857 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeOut 0.8s ease 3.5s forwards;
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    .splash-logo {
+      width: 120px;
+      height: 120px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border-radius: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      margin-bottom: 32px;
+      animation: logoFloat 2s ease infinite;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.05); }
+    }
+
+    .splash-title {
+      font-size: 56px;
+      font-weight: 900;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      margin-bottom: 12px;
+      letter-spacing: -2px;
+      animation: slideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .splash-subtitle {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      margin-bottom: 60px;
+      animation: fadeIn 0.8s ease 0.4s both;
+    }
+
+    .splash-from {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-weight: 600;
+      animation: fadeIn 0.8s ease 0.8s both;
+    }
+
+    /* Auth Screens - Glassmorphism */
+    .auth-screen {
+      display: none;
+      height: 100%;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      animation: fadeIn 0.6s ease;
+      overflow-y: auto;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .auth-screen.active {
+      display: flex;
+    }
+
+    .auth-card {
+      backdrop-filter: blur(40px);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 28px;
+      padding: 40px 28px;
+      width: 100%;
+      max-width: 420px;
+      max-height: 90%;
+      overflow-y: auto;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4);
+      animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(50px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .auth-logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      margin: 0 auto 24px;
+      box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+    }
+
+    .auth-title {
+      font-size: 32px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 8px;
+      color: #ffffff;
+      letter-spacing: -1px;
+    }
+
+    .auth-subtitle {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 15px;
+      margin-bottom: 32px;
+      font-weight: 500;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 15px;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      color: #ffffff;
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #10b981;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+    }
+
+    .profile-pic-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 24px;
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      border: 2px dashed rgba(16, 185, 129, 0.3);
+    }
+
+    .profile-pic-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+      border: 4px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-pic-preview:hover {
+      transform: scale(1.05) rotate(5deg);
+      box-shadow: 0 15px 60px rgba(16, 185, 129, 0.5);
+    }
+
+    .profile-pic-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .upload-hint {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+      text-align: center;
+    }
+
+    .captcha-box {
+      background: rgba(16, 185, 129, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      display: none;
+      animation: slideDown 0.3s ease;
+    }
+
+    .captcha-box.active {
+      display: block;
+    }
+
+    .captcha-question {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      margin-top: 4px;
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+    }
+
+    .checkbox-group a {
+      color: #10b981;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .checkbox-group a:hover {
+      color: #34d399;
+      text-decoration: underline;
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-bottom: 16px;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+    }
+
+    .primary-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(16, 185, 129, 0.5);
+    }
+
+    .primary-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .primary-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .secondary-link {
+      text-align: center;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 500;
+    }
+
+    .secondary-link a {
+      color: #10b981;
+      text-decoration: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .secondary-link a:hover {
+      color: #34d399;
+    }
+
+    .privacy-section {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      max-height: 280px;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .privacy-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .privacy-item {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 10px;
+      padding-left: 24px;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .privacy-item::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #10b981;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    /* Main App - Premium Design */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(40px);
+      background: rgba(15, 23, 42, 0.7);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .header-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -1px;
+    }
+
+    .header-title span {
+      font-size: 28px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-size: 20px;
+      position: relative;
+      backdrop-filter: blur(10px);
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      background: rgba(16, 185, 129, 0.2);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+      padding: 0 6px;
+    }
+
+    .notification-badge.active {
+      display: flex;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      padding-bottom: 100px;
+    }
+
+    .page {
+      display: none;
+      animation: pageEnter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes pageEnter {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Post Card - Modern Premium */
+    .post-card {
+      backdrop-filter: blur(40px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      animation: fadeInUp 0.4s ease-out;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .post-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 50px rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 20px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(16, 185, 129, 0.3);
+      cursor: pointer;
+    }
+
+    .avatar:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .post-user-info {
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .post-user-info h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .post-user-info p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 500;
+    }
+
+    .post-content {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .post-media {
+      width: 100%;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      max-height: 400px;
+      object-fit: cover;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .post-media:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 50px rgba(16, 185, 129, 0.3);
+    }
+
+    .fullscreen-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+      padding: 20px;
+    }
+
+    .fullscreen-modal.active {
+      display: flex;
+    }
+
+    .fullscreen-content {
+      max-width: 90%;
+      max-height: 90%;
+      position: relative;
+      animation: zoomIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes zoomIn {
+      from {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .fullscreen-content img,
+    .fullscreen-content video {
+      max-width: 100%;
+      max-height: 85vh;
+      border-radius: 16px;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+    }
+
+    .fullscreen-close {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 28px;
+      cursor: pointer;
+      color: #ffffff;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .fullscreen-close:hover {
+      background: rgba(239, 68, 68, 0.3);
+      transform: rotate(90deg);
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 16px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: none;
+      border-radius: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .action-btn:hover {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      transform: translateY(-2px);
+    }
+
+    .action-btn.liked {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    .like-btn.liked .heart-icon {
+      fill: #ef4444;
+      animation: heartBeat 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes heartBeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.3); }
+      50% { transform: scale(0.9); }
+      75% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .comments-section {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 16px;
+      margin-top: 16px;
+      animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+        max-height: 0;
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 600px;
+      }
+    }
+
+    .comments-list {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 16px;
+    }
+
+    .comment-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      animation: fadeInUp 0.3s ease-out;
+    }
+
+    .comment-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 2px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .comment-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .comment-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .comment-username {
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .comment-text {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+
+    .comment-time {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .comment-input-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .comment-input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 14px;
+      color: #ffffff;
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+
+    .comment-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .comment-input:focus {
+      outline: none;
+      border-color: #10b981;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .send-comment-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    }
+
+    .send-comment-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .follow-btn {
+      padding: 8px 20px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      border-radius: 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    }
+
+    .follow-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .follow-btn.following {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.7);
+      box-shadow: none;
+    }
+
+    .follow-btn.following:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    /* Bottom Navigation - Floating Modern */
+    .bottom-nav {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      backdrop-filter: blur(40px);
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 32px;
+      padding: 12px 20px;
+      display: flex;
+      gap: 8px;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      z-index: 100;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-item {
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      padding: 12px 16px;
+      border-radius: 20px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 24px;
+    }
+
+    .nav-item:hover {
+      transform: translateY(-4px);
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .nav-item.active {
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.15);
+    }
+
+    .nav-item.add-post {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: -12px 8px;
+      font-size: 28px;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    .nav-item.add-post:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 15px 40px rgba(16, 185, 129, 0.6);
+    }
+
+    /* Modal - Ultra Modern */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      backdrop-filter: blur(40px);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 28px;
+      padding: 28px;
+      max-width: 440px;
+      width: 100%;
+      animation: modalEnter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-height: 85%;
+      overflow-y: auto;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+    }
+
+    @keyframes modalEnter {
+      from {
+        opacity: 0;
+        transform: scale(0.8) translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .close-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.7);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-btn:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      transform: rotate(90deg);
+    }
+
+    .textarea-field {
+      width: 100%;
+      padding: 16px 18px;
+      border-radius: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 15px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 120px;
+      color: #ffffff;
+    }
+
+    .textarea-field::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .textarea-field:focus {
+      outline: none;
+      border-color: #10b981;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+    }
+
+    /* Profile Page - Premium */
+    .profile-header {
+      backdrop-filter: blur(40px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      padding: 32px 24px;
+      text-align: center;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-cover {
+      width: calc(100% + 48px);
+      height: 140px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      margin: -32px -24px 24px;
+      border-radius: 28px 28px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .profile-avatar-container {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .profile-avatar-large {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 48px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      overflow: hidden;
+      border: 5px solid rgba(15, 23, 42, 0.95);
+      box-shadow: 0 15px 50px rgba(16, 185, 129, 0.4);
+    }
+
+    .profile-avatar-large:hover {
+      transform: scale(1.05) rotate(5deg);
+      box-shadow: 0 20px 60px rgba(16, 185, 129, 0.6);
+    }
+
+    .profile-avatar-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-name {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .profile-username {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .profile-bio {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 24px;
+      line-height: 1.6;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat {
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .stat:hover {
+      transform: translateY(-4px);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: 900;
+      color: #10b981;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .edit-profile-btn {
+      width: 100%;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .edit-profile-btn:hover {
+      background: rgba(16, 185, 129, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+    }
+
+    .media-upload-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .media-upload-btn {
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px dashed rgba(16, 185, 129, 0.3);
+      border-radius: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      font-weight: 700;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .media-upload-btn:hover {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: #10b981;
+      transform: translateY(-2px);
+    }
+
+    #mediaPreview img, #mediaPreview video {
+      max-width: 100%;
+      border-radius: 16px;
+      margin-top: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Messages - Modern Chat UI */
+    .chat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-item {
+      backdrop-filter: blur(40px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .chat-item:hover {
+      transform: translateX(8px);
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+    }
+
+    .online-indicator {
+      width: 12px;
+      height: 12px;
+      background: #10b981;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      border: 3px solid rgba(15, 23, 42, 0.95);
+      animation: pulse 2s infinite;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+    }
+
+    .chat-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chat-name {
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .chat-preview {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-time {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 600;
+    }
+
+    .unread-badge {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Chat Screen */
+    .chat-screen {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .chat-header {
+      backdrop-filter: blur(40px);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      color: #ffffff;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-btn:hover {
+      background: rgba(16, 185, 129, 0.2);
+      transform: translateX(-4px);
+    }
+
+    .messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 14px 18px;
+      border-radius: 20px;
+      animation: slideUp 0.3s ease;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .message.sent {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border-bottom-right-radius: 6px;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    }
+
+    .message.received {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.9);
+      border-bottom-left-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .message-media {
+      max-width: 220px;
+      border-radius: 16px;
+      margin-top: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .chat-input-container {
+      backdrop-filter: blur(40px);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 20px 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 14px 20px;
+      border-radius: 24px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 15px;
+      color: #ffffff;
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+
+    .chat-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: #10b981;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .send-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .send-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 28px rgba(16, 185, 129, 0.6);
+    }
+
+    /* Notifications Panel */
+    .notifications-panel {
+      position: fixed;
+      top: 80px;
+      right: -380px;
+      width: 340px;
+      max-height: 70%;
+      backdrop-filter: blur(40px);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 24px;
+      overflow-y: auto;
+      z-index: 150;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+    }
+
+    .notifications-panel.active {
+      right: 24px;
+    }
+
+    .notification-item {
+      display: flex;
+      gap: 14px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .notification-item:hover {
+      transform: translateX(-4px);
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .notification-item.unread {
+      border-left: 4px solid #10b981;
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    .notification-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .notification-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .notification-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 4px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .notification-time {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 600;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 110px;
+      left: 50%;
+      transform: translateX(-50%);
+      backdrop-filter: blur(40px);
+      background: rgba(15, 23, 42, 0.95);
+      color: white;
+      padding: 16px 28px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 1000;
+      animation: slideUp 0.3s ease;
+      display: none;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .toast.active {
+      display: block;
+    }
+
+    .toast.error {
+      background: rgba(239, 68, 68, 0.95);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .toast.success {
+      background: rgba(16, 185, 129, 0.95);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .empty-icon {
+      font-size: 72px;
+      margin-bottom: 20px;
+      opacity: 0.3;
+    }
+
+    .empty-text {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 600;
+    }
+
+    /* Settings */
+    .settings-menu {
+      backdrop-filter: blur(40px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .settings-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .settings-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .settings-item:hover {
+      transform: translateX(6px);
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .settings-label {
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Theme Toggle Switch */
+    .theme-switch {
+      position: relative;
+      width: 56px;
+      height: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .theme-switch.active {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-color: #10b981;
+    }
+
+    .theme-switch-slider {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .theme-switch.active .theme-switch-slider {
+      transform: translateX(26px);
+    }
+
+    /* Followers/Following Modal */
+    .user-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .user-list-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .user-list-item:hover {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      transform: translateX(6px);
+    }
+
+    .user-list-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-list-name {
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 15px;
+      margin-bottom: 2px;
+    }
+
+    .user-list-username {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(16, 185, 129, 0.3);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(16, 185, 129, 0.5);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 32px 20px;
+      }
+
+      .profile-stats {
+        gap: 12px;
+      }
+
+      .stat {
+        padding: 8px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body class="light-theme"><!-- Splash Screen -->
+  <div class="splash-screen" id="splashScreen">
+   <div class="splash-logo">
+    🌱
+   </div>
+   <div class="splash-title">
+    AgroLink
+   </div>
+   <div class="splash-subtitle">
+    Sosyal Platform
+   </div>
+   <div class="splash-from">
+    FROM AGROLINK
+   </div>
+  </div><!-- Auth Screens -->
+  <div id="loginScreen" class="auth-screen">
+   <div class="auth-card">
+    <div class="auth-logo">
+     🌱
+    </div>
+    <h1 class="auth-title">Hoş Geldin</h1>
+    <p class="auth-subtitle">AgroLink'e giriş yap</p>
+    <form id="loginForm">
+     <div class="form-group"><label for="loginEmail" class="form-label">E-posta</label> <input type="email" id="loginEmail" class="form-input" placeholder="ornek@email.com" required>
+     </div>
+     <div class="form-group"><label for="loginPassword" class="form-label">Şifre</label> <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
+     </div><button type="submit" class="primary-btn">Giriş Yap</button>
+    </form>
+    <p class="secondary-link">Hesabın yok mu? <a id="goToRegister">Kayıt ol</a></p>
+   </div>
+  </div>
+  <div id="registerScreen" class="auth-screen">
+   <div class="auth-card">
+    <div class="auth-logo">
+     🌱
+    </div>
+    <h1 class="auth-title">Aramıza Katıl</h1>
+    <p class="auth-subtitle">AgroLink hesabı oluştur</p>
+    <form id="registerForm">
+     <div class="profile-pic-upload">
+      <div class="profile-pic-preview" id="profilePicPreview" onclick="document.getElementById('profilePicInput').click()">
+       📷
+      </div><input type="file" id="profilePicInput" accept="image/*" style="display: none;">
+      <p class="upload-hint">Profil fotoğrafı ekle (isteğe bağlı)</p>
+     </div>
+     <div class="form-group"><label for="regName" class="form-label">Ad Soyad</label> <input type="text" id="regName" class="form-input" placeholder="Ahmet Yılmaz" required>
+     </div>
+     <div class="form-group"><label for="regUsername" class="form-label">Kullanıcı Adı</label> <input type="text" id="regUsername" class="form-input" placeholder="@kullaniciadi" required>
+     </div>
+     <div class="form-group"><label for="regEmail" class="form-label">E-posta</label> <input type="email" id="regEmail" class="form-input" placeholder="ornek@email.com" required>
+     </div>
+     <div class="form-group"><label for="regPassword" class="form-label">Şifre</label> <input type="password" id="regPassword" class="form-input" placeholder="En az 6 karakter" required>
+     </div>
+     <div class="checkbox-group"><input type="checkbox" id="robotCheck" required> <label for="robotCheck">Robot değilim</label>
+     </div>
+     <div class="captcha-box" id="captchaBox">
+      <p class="captcha-question" id="captchaQuestion"></p><input type="number" id="captchaAnswer" class="form-input" placeholder="Cevabınız">
+     </div>
+     <div class="privacy-section">
+      <h3 class="privacy-title">📜 Gizlilik Sözleşmesi</h3>
+      <div class="privacy-item">
+       Verileriniz şifrelenmiş olarak saklanır
+      </div>
+      <div class="privacy-item">
+       Kişisel bilgileriniz üçüncü şahıslarla paylaşılmaz
+      </div>
+      <div class="privacy-item">
+       İstediğiniz zaman hesabınızı silebilirsiniz
+      </div>
+      <div class="privacy-item">
+       Tüm paylaşımlarınız size aittir
+      </div>
+      <div class="privacy-item">
+       Şifreniz kriptografik yöntemlerle korunur
+      </div>
+      <div class="privacy-item">
+       E-posta adresiniz gizli tutulur
+      </div>
+      <div class="privacy-item">
+       Spam ve zararlı içerik yasaktır
+      </div>
+      <div class="privacy-item">
+       Telif hakkı ihlali yapılamaz
+      </div>
+      <div class="privacy-item">
+       Kullanıcı verilerini satmıyoruz
+      </div>
+      <div class="privacy-item">
+       Cookie kullanımınızı kontrol edebilirsiniz
+      </div>
+      <div class="privacy-item">
+       İki faktörlü kimlik doğrulama kullanılır
+      </div>
+      <div class="privacy-item">
+       Hesap aktiviteleriniz loglanır
+      </div>
+      <div class="privacy-item">
+       Şüpheli aktivitelerde hesap askıya alınabilir
+      </div>
+      <div class="privacy-item">
+       Yasal süreçlerde verileriniz mahkemeye sunulabilir
+      </div>
+      <div class="privacy-item">
+       18 yaş altı kullanıcılar veli izni almalıdır
+      </div>
+      <div class="privacy-item">
+       Ticari amaçlı kullanım izin gerektirir
+      </div>
+      <div class="privacy-item">
+       Bot hesapları yasaktır
+      </div>
+      <div class="privacy-item">
+       Sahte profil oluşturma yasaktır
+      </div>
+      <div class="privacy-item">
+       Taciz ve nefret söylemi tolere edilmez
+      </div>
+      <div class="privacy-item">
+       Platform kurallarını kabul ediyorum
+      </div>
+     </div>
+     <div class="checkbox-group"><input type="checkbox" id="privacyCheck" required> <label for="privacyCheck"> <a onclick="event.preventDefault(); showPrivacyModal()">Gizlilik Sözleşmesi</a>'ni okudum ve kabul ediyorum </label>
+     </div><button type="submit" class="primary-btn">Hesap Oluştur</button>
+    </form>
+    <p class="secondary-link">Zaten hesabın var mı? <a id="goToLogin">Giriş yap</a></p>
+   </div>
+  </div><!-- Main App -->
+  <div class="app-wrapper" id="mainApp" style="display: none;">
+   <header class="header">
+    <h1 class="header-title"><span>🌱</span> AgroLink</h1>
+    <div class="header-actions"><button class="icon-btn" id="notificationsBtn"> 🔔 <span class="notification-badge" id="notificationBadge">0</span> </button> <button class="icon-btn" id="settingsBtn">⚙️</button>
+    </div>
+   </header>
+   <main class="main-content"><!-- Home Page (Feed) -->
+    <div id="homePage" class="page active">
+     <div id="feedContainer"></div>
+    </div><!-- Messages Page -->
+    <div id="messagesPage" class="page">
+     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2 style="font-size: 24px; font-weight: 900; color: #ffffff;">💬 Mesajlar</h2><button class="icon-btn" id="newMessageBtn" style="width: 48px; height: 48px; font-size: 24px;">
+       <svg width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line> <line x1="5" y1="12" x2="19" y2="12"></line>
+       </svg></button>
+     </div>
+     <div id="chatList" class="chat-list"></div>
+    </div><!-- Profile Page -->
+    <div id="profilePage" class="page">
+     <div class="profile-header">
+      <div class="profile-cover"></div>
+      <div class="profile-avatar-container">
+       <div class="profile-avatar-large" id="profileAvatar">
+        👤
+       </div>
+      </div>
+      <h2 class="profile-name" id="profileName">Kullanıcı</h2>
+      <p class="profile-username" id="profileUsername">@kullaniciadi</p>
+      <p class="profile-username" id="profileUserNumber" style="color: rgba(255, 255, 255, 0.4); font-size: 13px; margin-top: -8px;">#0000</p>
+      <p class="profile-bio" id="profileBio">Bio ekle...</p>
+      <div class="profile-stats">
+       <div class="stat" id="postsStatBtn"><span class="stat-number" id="postCount">0</span> <span class="stat-label">Gönderi</span>
+       </div>
+       <div class="stat" id="followersStatBtn"><span class="stat-number" id="followerCount">0</span> <span class="stat-label">Takipçi</span>
+       </div>
+       <div class="stat" id="followingStatBtn"><span class="stat-number" id="followingCount">0</span> <span class="stat-label">Takip</span>
+       </div>
+      </div><button class="edit-profile-btn" id="editProfileBtn">✏️ Profili Düzenle</button>
+     </div>
+     <div id="myPostsContainer"></div>
+    </div><!-- Settings Page -->
+    <div id="settingsPage" class="page">
+     <div class="settings-menu">
+      <h2 class="settings-title">⚙️ Ayarlar</h2>
+      <div class="settings-item" id="themeToggleItem"><span class="settings-label">🌙 Koyu Tema</span>
+       <div class="theme-switch" id="themeSwitch">
+        <div class="theme-switch-slider"></div>
+       </div>
+      </div>
+      <div class="settings-item" id="locationToggleItem"><span class="settings-label">📍 Konuma Göre Gönderi</span>
+       <div class="theme-switch" id="locationSwitch">
+        <div class="theme-switch-slider"></div>
+       </div>
+      </div>
+      <div class="settings-item" id="notificationToggleItem"><span class="settings-label">🔔 Bildirimler</span>
+       <div class="theme-switch active" id="notificationSwitch">
+        <div class="theme-switch-slider"></div>
+       </div>
+      </div>
+      <div class="settings-item" id="privacyItem"><span class="settings-label">🔒 Gizlilik</span> <span style="font-size: 20px;">→</span>
+      </div>
+      <div class="settings-item" id="languageItem"><span class="settings-label">🌍 Dil: Türkçe</span> <span style="font-size: 20px;">→</span>
+      </div>
+      <div class="settings-item" id="deleteAccountItem"><span class="settings-label">🗑️ Hesabı Sil</span> <span style="font-size: 20px;">→</span>
+      </div>
+      <div class="settings-item" id="logoutItem"><span class="settings-label">🚪 Çıkış Yap</span> <span style="font-size: 20px;">→</span>
+      </div>
+     </div>
+    </div><!-- AI Assistant Page -->
+    <div id="aiPage" class="page">
+     <div class="settings-menu">
+      <h2 class="settings-title">🤖 AgroLink AI</h2>
+      <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-bottom: 24px;">Wikipedia entegrasyonlu yapay zeka asistanı</p>
+     </div>
+     <div class="messages-container" id="aiMessagesContainer" style="max-height: 400px; overflow-y: auto; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 24px; margin-bottom: 20px;">
+      <div class="message received">
+       Merhaba! Ben AgroLink AI asistanınım. 🤖<br><br>
+        Wikipedia'dan bilgi alabilirim. Bana herhangi bir konu hakkında soru sorabilirsiniz!
+      </div>
+     </div>
+     <div class="chat-input-container" style="position: relative; background: transparent; padding: 0;"><input type="text" class="chat-input" id="aiInput" placeholder="Bir şey sor... (örn: Tarım nedir?)"> <button class="send-btn" id="sendAiMessage">➤</button>
+     </div>
+    </div><!-- Chat Screen -->
+    <div id="chatScreen" class="page" style="display: none;">
+     <div class="chat-screen">
+      <div class="chat-header"><button class="back-btn" id="backToMessages">←</button>
+       <div style="position: relative;">
+        <div class="avatar" style="width: 44px; height: 44px; font-size: 18px;" id="chatAvatar">
+         👤
+        </div>
+        <div class="online-indicator"></div>
+       </div>
+       <div class="chat-info" style="flex: 1;">
+        <div class="chat-name" id="chatName">
+         Kullanıcı
+        </div>
+       </div>
+      </div>
+      <div class="messages-container" id="messagesContainer"></div>
+      <div class="chat-input-container"><input type="text" class="chat-input" id="messageInput" placeholder="Mesaj yaz..."> <button class="send-btn" id="sendMessage">➤</button>
+      </div>
+     </div>
+    </div>
+   </main>
+   <nav class="bottom-nav"><button class="nav-item active" data-page="home">
+     <svg width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path> <polyline points="9 22 9 12 15 12 15 22"></polyline>
+     </svg></button> <button class="nav-item" data-page="messages">
+     <svg width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+     </svg></button> <button class="nav-item add-post" id="addPostBtn">
+     <svg width="28" height="28" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line> <line x1="5" y1="12" x2="19" y2="12"></line>
+     </svg></button> <button class="nav-item" data-page="ai">
+     <svg width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle> <path d="M12 16v-4"></path> <path d="M12 8h.01"></path> <path d="M8 12h8"></path> <circle cx="8" cy="8" r="1.5" fill="currentColor"></circle> <circle cx="16" cy="8" r="1.5" fill="currentColor"></circle>
+     </svg></button> <button class="nav-item" data-page="profile">
+     <svg width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path> <circle cx="12" cy="7" r="4"></circle>
+     </svg></button>
+   </nav>
+   <div class="notifications-panel" id="notificationsPanel">
+    <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 20px; color: #ffffff;">🔔 Bildirimler</h3>
+    <div id="notificationsList"></div>
+   </div>
+  </div><!-- Add Post Modal -->
+  <div class="modal" id="addPostModal">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h2 class="modal-title">✨ Yeni Gönderi</h2><button class="close-btn" id="closePostModal">×</button>
+    </div>
+    <form id="postForm"><textarea class="textarea-field" id="postContent" placeholder="Ne düşünüyorsun?" required></textarea>
+     <div class="form-group"><label class="form-label">📎 Medya Ekle</label>
+      <div class="media-upload-section"><label class="media-upload-btn" style="grid-column: 1 / -1;"> 📷 Fotoğraf veya Video <input type="file" id="postMedia" accept="image/*,video/*" style="display: none;"> </label>
+      </div>
+      <div id="mediaPreview"></div>
+     </div><button type="submit" class="primary-btn" id="submitPost">🚀 Paylaş</button>
+    </form>
+   </div>
+  </div><!-- Edit Profile Modal -->
+  <div class="modal" id="editProfileModal">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h2 class="modal-title">✏️ Profili Düzenle</h2><button class="close-btn" id="closeProfileModal">×</button>
+    </div>
+    <form id="editProfileForm">
+     <div class="profile-pic-upload" style="margin-bottom: 24px;">
+      <div class="profile-pic-preview" id="editProfilePicPreview" onclick="document.getElementById('editProfilePicInput').click()">
+       📷
+      </div><input type="file" id="editProfilePicInput" accept="image/*" style="display: none;">
+      <p class="upload-hint">Profil fotoğrafını deği��tir</p>
+     </div>
+     <div class="form-group"><label for="editName" class="form-label">İsim</label> <input type="text" id="editName" class="form-input" required>
+     </div>
+     <div class="form-group"><label for="editBio" class="form-label">Biyografi</label> <textarea id="editBio" class="textarea-field" style="min-height: 100px;" placeholder="Kendin hakkında birkaç şey yaz..."></textarea>
+     </div><button type="submit" class="primary-btn" id="saveProfile">💾 Kaydet</button>
+    </form>
+   </div>
+  </div><!-- New Message Modal -->
+  <div class="modal" id="newMessageModal">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h2 class="modal-title">✉️ Yeni Mesaj</h2><button class="close-btn" id="closeNewMessageModal">×</button>
+    </div><input type="text" class="form-input" id="userSearchInput" placeholder="🔍 Kullanıcı ara..." style="margin-bottom: 20px;">
+    <div class="user-list" id="allUsersList" style="max-height: 400px;">
+     <div style="text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.5);">
+      <div class="spinner" style="margin: 0 auto 16px;"></div> Kullanıcılar yükleniyor...
+     </div>
+    </div>
+   </div>
+  </div><!-- Delete Account Confirmation Modal -->
+  <div class="modal" id="deleteAccountModal">
+   <div class="modal-content" style="max-width: 400px;">
+    <div class="modal-header">
+     <h2 class="modal-title">⚠️ Hesabı Sil</h2><button class="close-btn" onclick="this.closest('.modal').remove()">×</button>
+    </div>
+    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 24px; line-height: 1.6;">Hesabınızı silmek üzeresiniz. Bu işlem geri alınamaz!<br><br><strong style="color: #ef4444;">Tüm gönderileriniz, mesajlarınız ve verileriniz kalıcı olarak silinecektir.</strong></p>
+    <div class="form-group"><label class="form-label">Onaylamak için şifrenizi girin:</label> <input type="password" id="deleteAccountPassword" class="form-input" placeholder="Şifreniz">
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;"><button class="primary-btn" style="background: rgba(255, 255, 255, 0.1);" onclick="this.closest('.modal').remove()"> İptal </button> <button class="primary-btn" id="confirmDeleteAccount" style="background: linear-gradient(135deg, #ef4444, #dc2626);"> Hesabı Sil </button>
+    </div>
+   </div>
+  </div>
+  <div class="toast" id="toast"></div><!-- Fullscreen Media Modal -->
+  <div class="fullscreen-modal" id="fullscreenModal">
+   <div class="fullscreen-content"><button class="fullscreen-close" onclick="closeFullscreen()">×</button>
+    <div id="fullscreenMediaContainer"></div>
+   </div>
+  </div>
+  <script>
+    const API_BASE = 'http://78.135.85.44:3000';
+    const WS_BASE = 'ws://78.135.85.44:3000';
+    
+    async function apiRequest(endpoint, options = {}) {
+      const defaultOptions = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          ...options.headers
+        },
+        mode: 'cors',
+        credentials: 'include'
+      };
+      
+      if (authToken && !options.headers?.Authorization) {
+        defaultOptions.headers['Authorization'] = `Bearer ${authToken}`;
+      }
+      
+      if (options.body instanceof FormData) {
+        delete defaultOptions.headers['Content-Type'];
+      }
+      
+      try {
+        console.log(`📡 API İsteği: ${endpoint}`, options.method || 'GET');
+        const response = await fetch(`${API_BASE}${endpoint}`, {
+          ...defaultOptions,
+          ...options,
+          headers: {
+            ...defaultOptions.headers,
+            ...options.headers
+          }
+        });
+        console.log(`✅ API Yanıt: ${response.status} ${response.statusText}`);
+        return response;
+      } catch (error) {
+        console.error('❌ API Hatası:', error);
+        throw error;
+      }
+    }
+
+    let currentUser = null;
+    let authToken = null;
+    let currentTheme = 'light';
+    let activeChatUser = null;
+    let ws = null;
+    let notificationCheckInterval = null;
+    let uploadedProfilePicFile = null;
+    let editUploadedProfilePicFile = null;
+    let captchaNum1 = 0;
+    let captchaNum2 = 0;
+    let currentCaptcha = null;
+
+    function generateCaptcha() {
+      captchaNum1 = Math.floor(Math.random() * 10) + 1;
+      captchaNum2 = Math.floor(Math.random() * 10) + 1;
+      const operations = ['+', '-', '×'];
+      const operation = operations[Math.floor(Math.random() * operations.length)];
+      document.getElementById('captchaQuestion').textContent = `${captchaNum1} ${operation} ${captchaNum2} = ?`;
+      return { num1: captchaNum1, num2: captchaNum2, operation };
+    }
+
+    function calculateCaptcha(num1, num2, operation) {
+      switch(operation) {
+        case '+': return num1 + num2;
+        case '-': return num1 - num2;
+        case '×': return num1 * num2;
+        default: return 0;
+      }
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type} active`;
+      setTimeout(() => toast.classList.remove('active'), 3000);
+    }
+
+    document.getElementById('profilePicInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        uploadedProfilePicFile = file;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          document.getElementById('profilePicPreview').innerHTML = `<img src="${event.target.result}" alt="Profile">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('editProfilePicInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        editUploadedProfilePicFile = file;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          document.getElementById('editProfilePicPreview').innerHTML = `<img src="${event.target.result}" alt="Profile">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('robotCheck').addEventListener('change', (e) => {
+      const captchaBox = document.getElementById('captchaBox');
+      if (e.target.checked) {
+        currentCaptcha = generateCaptcha();
+        captchaBox.classList.add('active');
+      } else {
+        captchaBox.classList.remove('active');
+      }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      const btn = e.target.querySelector('.primary-btn');
+      
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Giriş yapılıyor...';
+
+      try {
+        const response = await apiRequest('/api/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password })
+        });
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (e) {
+          data = { message: 'Sunucu yanıt vermiyor' };
+        }
+        
+        btn.disabled = false;
+        btn.innerHTML = '🚀 Giriş Yap';
+
+        if (response.ok && data.token) {
+          currentUser = data.user;
+          authToken = data.token;
+          localStorage.setItem('agrolink_token', authToken);
+          localStorage.setItem('agrolink_user', JSON.stringify(currentUser));
+          
+          document.getElementById('loginScreen').classList.remove('active');
+          document.getElementById('mainApp').style.display = 'flex';
+          loadUserData();
+          showToast('Hoş geldin! 🎉', 'success');
+        } else {
+          showToast(data.message || 'Giriş başarısız!', 'error');
+        }
+      } catch (error) {
+        console.error('❌ Giriş hatası:', error);
+        btn.disabled = false;
+        btn.innerHTML = 'Giriş Yap';
+        showToast('⚠️ Sunucuya bağlanılamıyor. Lütfen internet bağlantınızı kontrol edin.', 'error');
+      }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('regName').value;
+      const username = document.getElementById('regUsername').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+      const captchaAnswer = parseInt(document.getElementById('captchaAnswer').value);
+      
+      if (!currentCaptcha) {
+        showToast('L��tfen robot olmadığınızı onaylayın!', 'error');
+        return;
+      }
+
+      const correctAnswer = calculateCaptcha(currentCaptcha.num1, currentCaptcha.num2, currentCaptcha.operation);
+      if (captchaAnswer !== correctAnswer) {
+        showToast('Captcha yanlış!', 'error');
+        currentCaptcha = generateCaptcha();
+        return;
+      }
+
+      const btn = e.target.querySelector('.primary-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Kayıt yapılıyor...';
+
+      try {
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('username', username);
+        formData.append('email', email);
+        formData.append('password', password);
+        
+        if (uploadedProfilePicFile) {
+          formData.append('profilePic', uploadedProfilePicFile);
+        }
+
+        const response = await apiRequest('/api/auth/register', {
+          method: 'POST',
+          body: formData,
+          headers: {}
+        });
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (e) {
+          data = { message: 'Sunucu yanıt vermiyor' };
+        }
+        
+        btn.disabled = false;
+        btn.innerHTML = '🚀 Hesap Oluştur';
+
+        if (response.ok && data.token) {
+          currentUser = data.user;
+          authToken = data.token;
+          localStorage.setItem('agrolink_token', authToken);
+          localStorage.setItem('agrolink_user', JSON.stringify(currentUser));
+          
+          document.getElementById('registerScreen').classList.remove('active');
+          document.getElementById('mainApp').style.display = 'flex';
+          loadUserData();
+          showToast('Hoş geldin! 🎉', 'success');
+        } else {
+          showToast(data.message || 'Kayıt başarısız!', 'error');
+        }
+      } catch (error) {
+        btn.disabled = false;
+        btn.innerHTML = '🚀 Hesap Oluştur';
+        showToast('Bağlantı hatas����: ' + error.message, 'error');
+      }
+    });
+
+    document.getElementById('goToRegister').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('loginScreen').classList.remove('active');
+      document.getElementById('registerScreen').classList.add('active');
+    });
+
+    document.getElementById('goToLogin').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('registerScreen').classList.remove('active');
+      document.getElementById('loginScreen').classList.add('active');
+    });
+
+    function showPrivacyModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal active';
+      modal.innerHTML = `
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title">📜 Gizlilik Sözleşmesi</h2>
+            <button class="close-btn" onclick="this.closest('.modal').remove()">×</button>
+          </div>
+          <div class="privacy-section" style="max-height: 500px;">
+            <div class="privacy-item">Verileriniz şifrelenmiş olarak saklanır</div>
+            <div class="privacy-item">Kişisel bilgileriniz üçüncü şahıslarla paylaşılmaz</div>
+            <div class="privacy-item">İstediğiniz zaman hesabınızı silebilirsiniz</div>
+            <div class="privacy-item">Tüm paylaşımlarınız size aittir</div>
+            <div class="privacy-item">Şifreniz kriptografik yöntemlerle korunur</div>
+            <div class="privacy-item">E-posta adresiniz gizli tutulur</div>
+            <div class="privacy-item">Spam ve zararlı içerik yasaktır</div>
+            <div class="privacy-item">Telif hakkı ihlali yapılamaz</div>
+            <div class="privacy-item">Kullanıcı verilerini satmıyoruz</div>
+            <div class="privacy-item">Cookie kullanımınızı kontrol edebilirsiniz</div>
+            <div class="privacy-item">İki faktörlü kimlik doğrulama kullanılır</div>
+            <div class="privacy-item">Hesap aktiviteleriniz loglanır</div>
+            <div class="privacy-item">Şüpheli aktivitelerde hesap askıya alınabilir</div>
+            <div class="privacy-item">Yasal süreçlerde verileriniz mahkemeye sunulabilir</div>
+            <div class="privacy-item">18 yaş altı kullanıcılar veli izni almalıdır</div>
+            <div class="privacy-item">Ticari amaçlı kullanım izin gerektirir</div>
+            <div class="privacy-item">Bot hesapları yasaktır</div>
+            <div class="privacy-item">Sahte profil oluşturma yasaktır</div>
+            <div class="privacy-item">Taciz ve nefret söylemi tolere edilmez</div>
+            <div class="privacy-item">Platform kurallarını kabul ediyorum</div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    function logout() {
+      if (ws) ws.close();
+      if (notificationCheckInterval) clearInterval(notificationCheckInterval);
+      
+      localStorage.removeItem('agrolink_token');
+      localStorage.removeItem('agrolink_user');
+      localStorage.setItem('agrolink_last_seen', Date.now());
+      
+      currentUser = null;
+      authToken = null;
+      
+      document.getElementById('mainApp').style.display = 'none';
+      document.getElementById('loginScreen').classList.add('active');
+      showToast('Çıkış yapıldı 👋', 'success');
+    }
+
+    function connectWebSocket() {
+      if (!authToken) return;
+
+      try {
+        ws = new WebSocket(`${WS_BASE}?token=${authToken}`);
+
+        ws.onopen = () => {
+          console.log('🔌 WebSocket bağlandı');
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            console.log('📨 WebSocket Mesajı:', data);
+            
+            if (data.type === 'new_message') {
+              if (activeChatUser && activeChatUser.id === data.senderId) {
+                loadChatMessages(data.senderId);
+              }
+              loadMessages();
+              if (notificationsEnabled) {
+                showToast(`💬 Yeni mesaj: ${data.senderUsername}`, 'success');
+              }
+            } else if (data.type === 'notification') {
+              loadNotifications();
+              updateNotificationBadge();
+              if (notificationsEnabled && data.message) {
+                showToast(`🔔 ${data.message}`, 'success');
+              }
+            } else if (data.type === 'user_online' || data.type === 'user_offline') {
+              loadMessages();
+            }
+          } catch (error) {
+            console.error('WebSocket mesaj hatası:', error);
+          }
+        };
+
+        ws.onerror = (error) => {
+          console.error('WebSocket hatası:', error);
+        };
+
+        ws.onclose = () => {
+          console.log('WebSocket bağlantısı kapandı');
+          setTimeout(() => connectWebSocket(), 5000);
+        };
+      } catch (error) {
+        console.error('WebSocket bağlantı hatası:', error);
+      }
+    }
+
+    async function loadUserData() {
+      document.getElementById('profileName').textContent = currentUser.name || currentUser.username;
+      document.getElementById('profileUsername').textContent = '@' + (currentUser.username || 'kullanici');
+      document.getElementById('profileUserNumber').textContent = '#' + (currentUser.user_number || '0000');
+      
+      if (currentUser.profilePic) {
+        document.getElementById('profileAvatar').innerHTML = `<img src="${API_BASE}${currentUser.profilePic}" alt="Profile">`;
+      } else {
+        document.getElementById('profileAvatar').textContent = '👤';
+      }
+      
+      document.getElementById('profileBio').textContent = currentUser.bio || 'Bio ekle...';
+      
+      getUserLocation();
+      connectWebSocket();
+      checkInactiveNotifications();
+      
+      await loadFeed();
+      await loadMessages();
+      await loadNotifications();
+      await loadUserStats();
+      await loadMyPosts();
+    }
+
+    let userLocation = null;
+
+    function getUserLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            userLocation = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            };
+            console.log('📍 Konum alındı:', userLocation);
+            loadFeed();
+          },
+          (error) => {
+            console.log('⚠️ Konum alınamadı:', error);
+            userLocation = null;
+          },
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+        );
+      }
+    }
+
+    async function loadMyPosts() {
+      const container = document.getElementById('myPostsContainer');
+      
+      try {
+        const response = await apiRequest(`/api/users/${currentUser.id}/posts`, {
+          method: 'GET'
+        });
+
+        if (!response.ok) {
+          throw new Error('Gönderiler yüklenemedi');
+        }
+
+        const data = await response.json();
+        const posts = data.posts || [];
+
+        if (posts.length === 0) {
+          container.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><p class="empty-text">Henüz gönderi yok</p></div>';
+          return;
+        }
+
+        container.innerHTML = posts.map(post => `
+          <div class="post-card" data-post-id="${post.id}">
+            <div class="post-header">
+              <div class="avatar">${post.userProfilePic ? `<img src="${API_BASE}${post.userProfilePic}" alt="${post.username}">` : '👤'}</div>
+              <div class="post-user-info">
+                <h3>${post.username}</h3>
+                <p>${formatTime(post.createdAt)}</p>
+              </div>
+              <button class="icon-btn" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;" onclick="deletePost('${post.id}')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="post-content">${post.content}</div>
+            ${post.mediaUrl ? (post.mediaType === 'video' 
+              ? `<video src="${API_BASE}${post.mediaUrl}" class="post-media" controls onclick="openFullscreen('${API_BASE}${post.mediaUrl}', 'video')"></video>`
+              : `<img src="${API_BASE}${post.mediaUrl}" class="post-media" alt="Post media" onclick="openFullscreen('${API_BASE}${post.mediaUrl}', 'image')">`
+            ) : ''}
+            <div class="post-actions">
+              <button class="action-btn like-btn" onclick="toggleLike('${post.id}', this)" data-liked="${post.isLiked || false}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="${post.isLiked ? '#ef4444' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="like-count">${post.likeCount || 0}</span>
+              </button>
+              <button class="action-btn" onclick="toggleComments('${post.id}')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                ${post.commentCount || 0}
+              </button>
+              <button class="action-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="17 1 21 5 17 9"></polyline>
+                  <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                  <polyline points="7 23 3 19 7 15"></polyline>
+                  <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                </svg>
+                Paylaş
+              </button>
+            </div>
+            <div class="comments-section" id="comments-${post.id}" style="display: none;">
+              <div class="comments-list" id="comments-list-${post.id}"></div>
+              <div class="comment-input-container">
+                <input type="text" class="comment-input" id="comment-input-${post.id}" placeholder="Yorum yaz..." onkeypress="if(event.key==='Enter') sendComment('${post.id}')">
+                <button class="send-comment-btn" onclick="sendComment('${post.id}')">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Gönderi yükleme hatası:', error);
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p class="empty-text">Gönderiler yüklenemedi</p></div>';
+      }
+    }
+
+    async function deletePost(postId) {
+      const postCard = document.querySelector(`[data-post-id="${postId}"]`);
+      if (!postCard) return;
+
+      const deleteBtn = postCard.querySelector('.icon-btn');
+      const originalHTML = deleteBtn.innerHTML;
+      
+      deleteBtn.innerHTML = `
+        <button style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; margin-right: 6px;" onclick="event.stopPropagation(); confirmDeletePost('${postId}')">
+          Sil
+        </button>
+        <button style="background: rgba(255,255,255,0.1); color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;" onclick="event.stopPropagation(); cancelDeletePost('${postId}', \`${originalHTML.replace(/`/g, '\\`')}\`)">
+          İptal
+        </button>
+      `;
+    }
+
+    async function confirmDeletePost(postId) {
+      try {
+        const response = await apiRequest(`/api/posts/${postId}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          const postCard = document.querySelector(`[data-post-id="${postId}"]`);
+          if (postCard) {
+            postCard.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => postCard.remove(), 300);
+          }
+          showToast('Gönderi silindi! 🗑️', 'success');
+          await loadUserStats();
+        } else {
+          showToast('Gönderi silinemedi', 'error');
+        }
+      } catch (error) {
+        console.error('Gönderi silme hatası:', error);
+        showToast('Gönderi silinemedi', 'error');
+      }
+    }
+
+    function cancelDeletePost(postId, originalHTML) {
+      const postCard = document.querySelector(`[data-post-id="${postId}"]`);
+      if (postCard) {
+        const deleteBtn = postCard.querySelector('.icon-btn');
+        deleteBtn.innerHTML = originalHTML;
+      }
+    }
+
+    async function loadUserStats() {
+      try {
+        const response = await apiRequest(`/api/users/${currentUser.id}/stats`, {
+          method: 'GET'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          document.getElementById('postCount').textContent = data.postCount || 0;
+          document.getElementById('followerCount').textContent = data.followerCount || 0;
+          document.getElementById('followingCount').textContent = data.followingCount || 0;
+        }
+      } catch (error) {
+        console.error('İstatistik yükleme hatası:', error);
+      }
+    }
+
+    function checkInactiveNotifications() {
+      const lastSeen = localStorage.getItem('agrolink_last_seen');
+      const now = Date.now();
+      
+      if (lastSeen) {
+        const hoursSinceLastSeen = (now - parseInt(lastSeen)) / (1000 * 60 * 60);
+        
+        if (hoursSinceLastSeen >= 12) {
+          showToast('12 saatten fazla süredir yoktunuz! Yeni bildirimleri kontrol edin. ���', 'success');
+        }
+      }
+      
+      localStorage.setItem('agrolink_last_seen', now);
+      
+      notificationCheckInterval = setInterval(() => {
+        localStorage.setItem('agrolink_last_seen', Date.now());
+      }, 60000);
+    }
+
+    async function loadFeed() {
+      const container = document.getElementById('feedContainer');
+      
+      try {
+        let url = '/api/posts';
+        if (userLocation) {
+          url += `?lat=${userLocation.latitude}&lng=${userLocation.longitude}`;
+        }
+
+        const response = await apiRequest(url, {
+          method: 'GET'
+        });
+
+        if (!response.ok) {
+          throw new Error('Feed yüklenemedi');
+        }
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (e) {
+          throw new Error('Veri formatı hatalı');
+        }
+        const posts = data.posts || [];
+
+        if (posts.length === 0) {
+          container.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><p class="empty-text">Henüz gönderi yok</p></div>';
+          return;
+        }
+
+        container.innerHTML = posts.map(post => `
+          <div class="post-card" data-post-id="${post.id}">
+            <div class="post-header">
+              <div class="avatar" onclick="viewUserProfile('${post.userId}')">${post.userProfilePic ? `<img src="${API_BASE}${post.userProfilePic}" alt="${post.username}">` : '👤'}</div>
+              <div class="post-user-info" onclick="viewUserProfile('${post.userId}')">
+                <h3>${post.username}</h3>
+                <p>${formatTime(post.createdAt)}</p>
+              </div>
+              ${post.userId !== currentUser.id ? `
+                <button class="follow-btn ${post.isFollowing ? 'following' : ''}" onclick="toggleFollow('${post.userId}', this)">
+                  ${post.isFollowing ? '✓ Takip' : '➕ Takip'}
+                </button>
+              ` : ''}
+            </div>
+            <div class="post-content">${post.content}</div>
+            ${post.mediaUrl ? (post.mediaType === 'video' 
+              ? `<video src="${API_BASE}${post.mediaUrl}" class="post-media" controls onclick="openFullscreen('${API_BASE}${post.mediaUrl}', 'video')"></video>`
+              : `<img src="${API_BASE}${post.mediaUrl}" class="post-media" alt="Post media" onclick="openFullscreen('${API_BASE}${post.mediaUrl}', 'image')">`
+            ) : ''}
+            <div class="post-actions">
+              <button class="action-btn like-btn" onclick="toggleLike('${post.id}', this)" data-liked="${post.isLiked || false}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="${post.isLiked ? '#ef4444' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="like-count">${post.likeCount || 0}</span>
+              </button>
+              <button class="action-btn" onclick="toggleComments('${post.id}')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                ${post.commentCount || 0}
+              </button>
+              <button class="action-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="17 1 21 5 17 9"></polyline>
+                  <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                  <polyline points="7 23 3 19 7 15"></polyline>
+                  <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                </svg>
+                Paylaş
+              </button>
+            </div>
+            <div class="comments-section" id="comments-${post.id}" style="display: none;">
+              <div class="comments-list" id="comments-list-${post.id}"></div>
+              <div class="comment-input-container">
+                <input type="text" class="comment-input" id="comment-input-${post.id}" placeholder="Yorum yaz..." onkeypress="if(event.key==='Enter') sendComment('${post.id}')">
+                <button class="send-comment-btn" onclick="sendComment('${post.id}')">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Feed yükleme hatası:', error);
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p class="empty-text">Gönderi yüklenemedi</p></div>';
+      }
+    }
+
+    async function toggleLike(postId, btn) {
+      try {
+        const response = await apiRequest(`/api/posts/${postId}/like`, {
+          method: 'POST'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const heartIcon = btn.querySelector('.heart-icon');
+          const likeCount = btn.querySelector('.like-count');
+          
+          btn.classList.toggle('liked');
+          
+          if (btn.classList.contains('liked')) {
+            heartIcon.setAttribute('fill', '#ef4444');
+            btn.dataset.liked = 'true';
+          } else {
+            heartIcon.setAttribute('fill', 'none');
+            btn.dataset.liked = 'false';
+          }
+          
+          likeCount.textContent = data.likeCount || 0;
+        }
+      } catch (error) {
+        console.error('Beğeni hatası:', error);
+      }
+    }
+
+    function openFullscreen(mediaUrl, mediaType) {
+      const modal = document.getElementById('fullscreenModal');
+      const container = document.getElementById('fullscreenMediaContainer');
+      
+      if (mediaType === 'video') {
+        container.innerHTML = `<video src="${mediaUrl}" controls autoplay style="max-width: 100%; max-height: 85vh; border-radius: 16px;"></video>`;
+      } else {
+        container.innerHTML = `<img src="${mediaUrl}" alt="Fullscreen" style="max-width: 100%; max-height: 85vh; border-radius: 16px;">`;
+      }
+      
+      modal.classList.add('active');
+    }
+
+    function closeFullscreen() {
+      const modal = document.getElementById('fullscreenModal');
+      const container = document.getElementById('fullscreenMediaContainer');
+      modal.classList.remove('active');
+      
+      setTimeout(() => {
+        container.innerHTML = '';
+      }, 300);
+    }
+
+    async function toggleComments(postId) {
+      const commentsSection = document.getElementById(`comments-${postId}`);
+      
+      if (commentsSection.style.display === 'none') {
+        commentsSection.style.display = 'block';
+        await loadComments(postId);
+      } else {
+        commentsSection.style.display = 'none';
+      }
+    }
+
+    async function loadComments(postId) {
+      const container = document.getElementById(`comments-list-${postId}`);
+      
+      try {
+        const response = await apiRequest(`/api/posts/${postId}/comments`, {
+          method: 'GET'
+        });
+
+        if (!response.ok) {
+          throw new Error('Yorumlar yüklenemedi');
+        }
+
+        const data = await response.json();
+        const comments = data.comments || [];
+
+        if (comments.length === 0) {
+          container.innerHTML = '<div style="text-align: center; padding: 20px; color: rgba(255, 255, 255, 0.5); font-size: 14px;">Henüz yorum yok. İlk yorumu sen yap! 💬</div>';
+          return;
+        }
+
+        container.innerHTML = comments.map(comment => `
+          <div class="comment-item">
+            <div class="comment-avatar">${comment.userProfilePic ? `<img src="${API_BASE}${comment.userProfilePic}" alt="${comment.username}">` : '👤'}</div>
+            <div class="comment-content">
+              <div class="comment-username">${comment.username}</div>
+              <div class="comment-text">${comment.content}</div>
+              <div class="comment-time">${formatTime(comment.createdAt)}</div>
+            </div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Yorum yükleme hatası:', error);
+        container.innerHTML = '<div style="text-align: center; padding: 20px; color: rgba(255, 255, 255, 0.5); font-size: 14px;">Yorumlar yüklenemedi ❌</div>';
+      }
+    }
+
+    async function sendComment(postId) {
+      const input = document.getElementById(`comment-input-${postId}`);
+      const content = input.value.trim();
+      
+      if (!content) return;
+
+      try {
+        const response = await apiRequest(`/api/posts/${postId}/comments`, {
+          method: 'POST',
+          body: JSON.stringify({ content })
+        });
+
+        if (response.ok) {
+          input.value = '';
+          await loadComments(postId);
+          showToast('Yorum gönderildi! 💬', 'success');
+        } else {
+          const error = await response.json();
+          showToast(error.message || 'Yorum gönderilemedi', 'error');
+        }
+      } catch (error) {
+        console.error('Yorum gönderme hatası:', error);
+        showToast('Yorum gönderilemedi', 'error');
+      }
+    }
+
+    async function viewUserProfile(userId) {
+      if (userId === currentUser.id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('profilePage').classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        document.querySelector('[data-page="profile"]').classList.add('active');
+        return;
+      }
+
+      try {
+        const response = await apiRequest(`/api/users/${userId}`, {
+          method: 'GET'
+        });
+
+        if (!response.ok) {
+          throw new Error('Profil yüklenemedi');
+        }
+
+        const data = await response.json();
+        const user = data.user;
+
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.id = 'userProfileModal';
+        modal.innerHTML = `
+          <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+              <h2 class="modal-title">@${user.username}</h2>
+              <button class="close-btn" onclick="this.closest('.modal').remove()">×</button>
+            </div>
+            <div class="profile-header" style="margin-bottom: 0;">
+              <div class="profile-cover"></div>
+              <div class="profile-avatar-container">
+                <div class="profile-avatar-large">${user.profilePic ? `<img src="${API_BASE}${user.profilePic}" alt="${user.username}">` : '👤'}</div>
+              </div>
+              <h2 class="profile-name">${user.name || user.username}</h2>
+              <p class="profile-username">@${user.username}</p>
+              <p class="profile-username" style="color: rgba(255, 255, 255, 0.4); font-size: 13px; margin-top: -8px;">#${user.user_number || '0000'}</p>
+              <p class="profile-bio">${user.bio || 'Bio yok'}</p>
+              <div class="profile-stats">
+                <div class="stat">
+                  <span class="stat-number">${user.postCount || 0}</span>
+                  <span class="stat-label">G��nderi</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-number">${user.followerCount || 0}</span>
+                  <span class="stat-label">Takipçi</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-number">${user.followingCount || 0}</span>
+                  <span class="stat-label">Takip</span>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px;">
+                <button class="follow-btn ${user.isFollowing ? 'following' : ''}" onclick="toggleFollowProfile('${userId}', this)" style="width: 100%; border-radius: 16px;">
+                  ${user.isFollowing ? '✓ Takiptesin' : '➕ Takip Et'}
+                </button>
+                <button class="follow-btn" onclick="messageUser('${userId}', '${user.username}')" style="width: 100%; border-radius: 16px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                  💬 Mesaj
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+      } catch (error) {
+        console.error('Profil görüntüleme hatası:', error);
+        showToast('Profil yüklenemedi', 'error');
+      }
+    }
+
+    async function toggleFollow(userId, btn) {
+      try {
+        const response = await apiRequest(`/api/users/${userId}/follow`, {
+          method: 'POST'
+        });
+
+        if (response.ok) {
+          const isFollowing = btn.classList.contains('following');
+          btn.classList.toggle('following');
+          btn.textContent = isFollowing ? '➕ Takip' : '��� Takip';
+          showToast(isFollowing ? 'Takipten çıkıldı' : 'Takip ediliyor! 🎉', 'success');
+          loadFeed();
+          loadUserStats();
+        }
+      } catch (error) {
+        console.error('Takip hatası:', error);
+        showToast('İ��lem başarısız', 'error');
+      }
+    }
+
+    function toggleFollowProfile(userId, btn) {
+      toggleFollow(userId, btn);
+    }
+
+    function messageUser(userId, username) {
+      document.querySelectorAll('.modal').forEach(m => m.remove());
+      openChat(userId, username);
+      
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('chatScreen').style.display = 'block';
+      
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-page="messages"]').classList.add('active');
+    }
+
+    async function loadMessages() {
+      const container = document.getElementById('chatList');
+      
+      try {
+        const response = await apiRequest('/api/messages/conversations', {
+          method: 'GET'
+        });
+
+        if (!response.ok) {
+          throw new Error('Mesajlar yüklenemedi');
+        }
+
+        const data = await response.json();
+        const conversations = data.conversations || [];
+
+        if (conversations.length === 0) {
+          container.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div><p class="empty-text">Henüz mesaj yok</p></div>';
+          return;
+        }
+
+        container.innerHTML = conversations.map(conv => `
+          <div class="chat-item" onclick="openChat('${conv.userId}', '${conv.username}')">
+            <div style="position: relative;">
+              <div class="avatar" style="width: 52px; height: 52px; font-size: 22px;">${conv.profilePic ? `<img src="${API_BASE}${conv.profilePic}" alt="${conv.username}">` : '👤'}</div>
+              ${conv.online ? '<div class="online-indicator"></div>' : ''}
+            </div>
+            <div class="chat-info">
+              <div class="chat-name">${conv.username}</div>
+              <p class="chat-preview">${conv.lastMessage || 'Mesaj yok'}</p>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+              <span class="chat-time">${formatTime(conv.lastMessageTime)}</span>
+              ${conv.unread > 0 ? `<span class="unread-badge">${conv.unread}</span>` : ''}
+            </div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Mesaj yükleme hatası:', error);
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p class="empty-text">Mesajlar yüklenemedi</p></div>';
+      }
+    }
+
+    function openChat(userId, username) {
+      activeChatUser = { id: userId, username };
+      document.getElementById('chatName').textContent = username;
+      document.getElementById('chatAvatar').textContent = '👤';
+      
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('chatScreen').style.display = 'block';
+      
+      loadChatMessages(userId);
+    }
+
+    async function loadChatMessages(userId) {
+      const container = document.getElementById('messagesContainer');
+      
+      try {
+        const response = await apiRequest(`/api/messages/${userId}`, {
+          method: 'GET'
+        });
+
+        if (!response.ok) {
+          throw new Error('Mesajlar yüklenemedi');
+        }
+
+        const data = await response.json();
+        const messages = data.messages || [];
+
+        if (messages.length === 0) {
+          container.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div><p class="empty-text">Henüz mesaj yok</p></div>';
+          return;
+        }
+
+        container.innerHTML = messages.map(msg => {
+          const isSent = msg.senderId === currentUser.id;
+          return `<div class="message ${isSent ? 'sent' : 'received'}">${msg.content}</div>`;
+        }).join('');
+
+        container.scrollTop = container.scrollHeight;
+      } catch (error) {
+        console.error('Mesaj yükleme hatası:', error);
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p class="empty-text">Mesajlar yüklenemedi</p></div>';
+      }
+    }
+
+    document.getElementById('sendMessage').addEventListener('click', sendMessage);
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    async function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const content = input.value.trim();
+      if (!content || !activeChatUser) return;
+
+      try {
+        const response = await apiRequest('/api/messages', {
+          method: 'POST',
+          body: JSON.stringify({
+            recipientId: activeChatUser.id,
+            content
+          })
+        });
+
+        if (response.ok) {
+          input.value = '';
+          loadChatMessages(activeChatUser.id);
+        }
+      } catch (error) {
+        console.error('Mesaj gönderme hatası:', error);
+        showToast('Mesaj gönderilemedi', 'error');
+      }
+    }
+
+    document.getElementById('backToMessages').addEventListener('click', () => {
+      document.getElementById('chatScreen').style.display = 'none';
+      document.getElementById('messagesPage').classList.add('active');
+      activeChatUser = null;
+      
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-page="messages"]').classList.add('active');
+    });
+
+    document.getElementById('addPostBtn').addEventListener('click', () => {
+      document.getElementById('addPostModal').classList.add('active');
+    });
+
+    document.getElementById('closePostModal').addEventListener('click', () => {
+      document.getElementById('addPostModal').classList.remove('active');
+    });
+
+    let uploadedMediaFile = null;
+    let uploadedMediaType = null;
+
+    document.getElementById('postMedia').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        uploadedMediaFile = file;
+        uploadedMediaType = file.type.startsWith('video/') ? 'video' : 'image';
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          if (uploadedMediaType === 'video') {
+            document.getElementById('mediaPreview').innerHTML = 
+              `<video src="${event.target.result}" controls style="border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);"></video>`;
+          } else {
+            document.getElementById('mediaPreview').innerHTML = 
+              `<img src="${event.target.result}" alt="Preview" style="border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">`;
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('postForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const content = document.getElementById('postContent').value.trim();
+      
+      const btn = document.getElementById('submitPost');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Paylaşılıyor...';
+
+      const formData = new FormData();
+      formData.append('content', content);
+      
+      if (uploadedMediaFile) {
+        formData.append('media', uploadedMediaFile);
+        formData.append('mediaType', uploadedMediaType);
+      }
+
+      try {
+        const response = await apiRequest('/api/posts', {
+          method: 'POST',
+          body: formData,
+          headers: {}
+        });
+
+        if (response.ok) {
+          document.getElementById('postForm').reset();
+          document.getElementById('mediaPreview').innerHTML = '';
+          uploadedMediaFile = null;
+          uploadedMediaType = null;
+          document.getElementById('addPostModal').classList.remove('active');
+          loadFeed();
+          loadUserStats();
+          showToast('Gönderi paylaşıldı! 🎉', 'success');
+        } else {
+          const error = await response.json();
+          showToast(error.message || 'Gönderi paylaşılamadı', 'error');
+        }
+      } catch (error) {
+        console.error('Gönderi yükleme hatası:', error);
+        showToast('Gönderi yüklenemedi', 'error');
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = '🚀 Paylaş';
+    });
+
+    document.getElementById('editProfileBtn').addEventListener('click', () => {
+      document.getElementById('editName').value = currentUser.name || '';
+      document.getElementById('editBio').value = currentUser.bio || '';
+      
+      if (currentUser.profilePic) {
+        document.getElementById('editProfilePicPreview').innerHTML = `<img src="${API_BASE}${currentUser.profilePic}" alt="Profile">`;
+      } else {
+        document.getElementById('editProfilePicPreview').textContent = '���';
+      }
+      
+      document.getElementById('editProfileModal').classList.add('active');
+    });
+
+    document.getElementById('closeProfileModal').addEventListener('click', () => {
+      document.getElementById('editProfileModal').classList.remove('active');
+    });
+
+    document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const btn = document.getElementById('saveProfile');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Kaydediliyor...';
+
+      try {
+        const formData = new FormData();
+        formData.append('name', document.getElementById('editName').value);
+        formData.append('bio', document.getElementById('editBio').value);
+        
+        if (editUploadedProfilePicFile) {
+          formData.append('profilePic', editUploadedProfilePicFile);
+        }
+
+        const response = await apiRequest('/api/users/profile', {
+          method: 'PUT',
+          body: formData,
+          headers: {}
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          currentUser = { ...currentUser, ...data.user };
+          localStorage.setItem('agrolink_user', JSON.stringify(currentUser));
+          
+          document.getElementById('profileName').textContent = currentUser.name || currentUser.username;
+          document.getElementById('profileBio').textContent = currentUser.bio || 'Bio ekle...';
+          
+          if (currentUser.profilePic) {
+            document.getElementById('profileAvatar').innerHTML = `<img src="${API_BASE}${currentUser.profilePic}" alt="Profile">`;
+          }
+          
+          document.getElementById('editProfileModal').classList.remove('active');
+          editUploadedProfilePicFile = null;
+          showToast('Profil güncellendi! 🎉', 'success');
+        } else {
+          showToast('Profil güncellenemedi', 'error');
+        }
+      } catch (error) {
+        console.error('Profil güncelleme hatası:', error);
+        showToast('Profil güncellenemedi', 'error');
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = '💾 Kaydet';
+    });
+
+    document.getElementById('followersStatBtn').addEventListener('click', async () => {
+      try {
+        const response = await apiRequest(`/api/users/${currentUser.id}/followers`, {
+          method: 'GET'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          showUserListModal('Takipçiler', data.followers || []);
+        }
+      } catch (error) {
+        console.error('Takipçi listesi hatası:', error);
+        showToast('Takipçiler yüklenemedi', 'error');
+      }
+    });
+
+    document.getElementById('followingStatBtn').addEventListener('click', async () => {
+      try {
+        const response = await apiRequest(`/api/users/${currentUser.id}/following`, {
+          method: 'GET'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          showUserListModal('Takip Edilenler', data.following || []);
+        }
+      } catch (error) {
+        console.error('Takip listesi hatası:', error);
+        showToast('Takip edilenler yüklenemedi', 'error');
+      }
+    });
+
+    function showUserListModal(title, users) {
+      const modal = document.createElement('div');
+      modal.className = 'modal active';
+      modal.innerHTML = `
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title">${title}</h2>
+            <button class="close-btn" onclick="this.closest('.modal').remove()">×</button>
+          </div>
+          <div class="user-list">
+            ${users.length === 0 ? '<div class="empty-state"><div class="empty-icon">👥</div><p class="empty-text">Henüz kimse yok</p></div>' : users.map(user => `
+              <div class="user-list-item" onclick="viewUserProfile('${user.id}'); this.closest('.modal').remove();">
+                <div class="avatar" style="width: 48px; height: 48px; font-size: 20px;">${user.profilePic ? `<img src="${API_BASE}${user.profilePic}" alt="${user.username}">` : '👤'}</div>
+                <div class="user-list-info">
+                  <div class="user-list-name">${user.name || user.username}</div>
+                  <div class="user-list-username">@${user.username}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    document.getElementById('notificationsBtn').addEventListener('click', () => {
+      const panel = document.getElementById('notificationsPanel');
+      panel.classList.toggle('active');
+    });
+
+    async function loadNotifications() {
+      try {
+        const response = await apiRequest('/api/notifications', {
+          method: 'GET'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const notifications = data.notifications || [];
+          
+          const container = document.getElementById('notificationsList');
+          
+          if (notifications.length === 0) {
+            container.innerHTML = '<div class="empty-state"><div class="empty-icon">🔔</div><p class="empty-text">Bildirim yok</p></div>';
+          } else {
+            container.innerHTML = notifications.map(notif => `
+              <div class="notification-item ${notif.read ? '' : 'unread'}">
+                <div class="notification-icon">${notif.icon || '📢'}</div>
+                <div class="notification-content">
+                  <p class="notification-text">${notif.message}</p>
+                  <p class="notification-time">${formatTime(notif.createdAt)}</p>
+                </div>
+              </div>
+            `).join('');
+          }
+          
+          updateNotificationBadge();
+        }
+      } catch (error) {
+        console.error('Bildirim yükleme hatası:', error);
+      }
+    }
+
+    function updateNotificationBadge() {
+      const badge = document.getElementById('notificationBadge');
+      const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+      
+      if (unreadCount > 0) {
+        badge.textContent = unreadCount;
+        badge.classList.add('active');
+      } else {
+        badge.classList.remove('active');
+      }
+    }
+
+    document.getElementById('settingsBtn').addEventListener('click', () => {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('settingsPage').classList.add('active');
+      
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    });
+
+    document.getElementById('themeToggleItem').addEventListener('click', (e) => {
+      if (e.target.closest('.theme-switch')) {
+        toggleTheme();
+      }
+    });
+
+    let locationEnabled = false;
+
+    document.getElementById('locationToggleItem').addEventListener('click', (e) => {
+      if (e.target.closest('.theme-switch')) {
+        toggleLocation();
+      }
+    });
+
+    function toggleLocation() {
+      const locationSwitch = document.getElementById('locationSwitch');
+      locationEnabled = !locationEnabled;
+      locationSwitch.classList.toggle('active');
+      localStorage.setItem('agrolink_location', locationEnabled);
+      
+      if (locationEnabled) {
+        getUserLocation();
+        showToast('📍 Konuma göre gönderiler aktif', 'success');
+      } else {
+        userLocation = null;
+        loadFeed();
+        showToast('🌍 Tüm gönderiler gösteriliyor', 'success');
+      }
+    }
+
+    let notificationsEnabled = true;
+
+    document.getElementById('notificationToggleItem').addEventListener('click', (e) => {
+      if (e.target.closest('.theme-switch')) {
+        toggleNotifications();
+      }
+    });
+
+    function toggleNotifications() {
+      const notificationSwitch = document.getElementById('notificationSwitch');
+      notificationsEnabled = !notificationsEnabled;
+      notificationSwitch.classList.toggle('active');
+      localStorage.setItem('agrolink_notifications', notificationsEnabled);
+      showToast(notificationsEnabled ? '🔔 Bildirimler aktif' : '🔕 Bildirimler kapalı', 'success');
+    }
+
+    document.getElementById('privacyItem').addEventListener('click', () => {
+      showPrivacyModal();
+    });
+
+    document.getElementById('languageItem').addEventListener('click', () => {
+      const modal = document.createElement('div');
+      modal.className = 'modal active';
+      modal.innerHTML = `
+        <div class="modal-content" style="max-width: 400px;">
+          <div class="modal-header">
+            <h2 class="modal-title">🌍 Dil Seçimi</h2>
+            <button class="close-btn" onclick="this.closest('.modal').remove()">×</button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <button class="primary-btn" onclick="changeLanguage('tr'); this.closest('.modal').remove();">
+              🇹🇷 Türkçe
+            </button>
+            <button class="primary-btn" style="background: rgba(255,255,255,0.1);" onclick="changeLanguage('en'); this.closest('.modal').remove();">
+              🇬🇧 English
+            </button>
+            <button class="primary-btn" style="background: rgba(255,255,255,0.1);" onclick="changeLanguage('ar'); this.closest('.modal').remove();">
+              🇸🇦 العربية
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    });
+
+    function changeLanguage(lang) {
+      localStorage.setItem('agrolink_language', lang);
+      showToast('Dil ayarı güncellendi! 🌍', 'success');
+    }
+
+    function toggleTheme() {
+      const themeSwitch = document.getElementById('themeSwitch');
+      currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.body.className = currentTheme + '-theme';
+      themeSwitch.classList.toggle('active');
+      localStorage.setItem('agrolink_theme', currentTheme);
+      showToast(currentTheme === 'dark' ? '🌙 Koyu tema aktif' : '☀��� Açık tema aktif', 'success');
+    }
+
+    document.getElementById('deleteAccountItem').addEventListener('click', () => {
+      document.getElementById('deleteAccountModal').classList.add('active');
+    });
+
+    document.getElementById('confirmDeleteAccount').addEventListener('click', async () => {
+      const password = document.getElementById('deleteAccountPassword').value;
+      
+      if (!password) {
+        showToast('Lütfen şifrenizi girin!', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('confirmDeleteAccount');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Siliniyor...';
+
+      try {
+        const response = await apiRequest('/api/users/delete', {
+          method: 'DELETE',
+          body: JSON.stringify({ password })
+        });
+
+        if (response.ok) {
+          document.querySelectorAll('.modal').forEach(m => m.remove());
+          logout();
+          showToast('Hesabınız başarıyla silindi', 'success');
+        } else {
+          const data = await response.json();
+          showToast(data.message || 'Hesap silinemedi', 'error');
+          btn.disabled = false;
+          btn.innerHTML = 'Hesabı Sil';
+        }
+      } catch (error) {
+        console.error('Hesap silme hatası:', error);
+        showToast('Bir hata oluştu', 'error');
+        btn.disabled = false;
+        btn.innerHTML = 'Hesabı Sil';
+      }
+    });
+
+    document.getElementById('newMessageBtn').addEventListener('click', async () => {
+      document.getElementById('newMessageModal').classList.add('active');
+      await loadAllUsers();
+    });
+
+    document.getElementById('closeNewMessageModal').addEventListener('click', () => {
+      document.getElementById('newMessageModal').classList.remove('active');
+    });
+
+    async function loadAllUsers() {
+      const container = document.getElementById('allUsersList');
+      
+      try {
+        const response = await apiRequest('/api/users/all', {
+          method: 'GET'
+        });
+
+        if (!response.ok) {
+          throw new Error('Kullanıcılar yüklenemedi');
+        }
+
+        const data = await response.json();
+        const users = data.users || [];
+
+        if (users.length === 0) {
+          container.innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div><p class="empty-text">Kullanıcı bulunamadı</p></div>';
+          return;
+        }
+
+        container.innerHTML = users.map(user => `
+          <div class="user-list-item" onclick="startNewChat('${user.id}', '${user.username}')">
+            <div class="avatar" style="width: 48px; height: 48px; font-size: 20px;">${user.profilePic ? `<img src="${API_BASE}${user.profilePic}" alt="${user.username}">` : '👤'}</div>
+            <div class="user-list-info">
+              <div class="user-list-name">${user.name || user.username}</div>
+              <div class="user-list-username">@${user.username}</div>
+            </div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Kullanıcı yükleme hatası:', error);
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p class="empty-text">Kullanıcılar yüklenemedi</p></div>';
+      }
+    }
+
+    document.getElementById('userSearchInput').addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const userItems = document.querySelectorAll('#allUsersList .user-list-item');
+      
+      userItems.forEach(item => {
+        const name = item.querySelector('.user-list-name').textContent.toLowerCase();
+        const username = item.querySelector('.user-list-username').textContent.toLowerCase();
+        
+        if (name.includes(searchTerm) || username.includes(searchTerm)) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+
+    function startNewChat(userId, username) {
+      document.getElementById('newMessageModal').classList.remove('active');
+      openChat(userId, username);
+      
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('chatScreen').style.display = 'block';
+      
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-page="messages"]').classList.add('active');
+    }
+
+    document.getElementById('sendAiMessage').addEventListener('click', sendAiMessage);
+    document.getElementById('aiInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendAiMessage();
+    });
+
+    async function sendAiMessage() {
+      const input = document.getElementById('aiInput');
+      const question = input.value.trim();
+      if (!question) return;
+
+      const container = document.getElementById('aiMessagesContainer');
+      
+      const userMessageDiv = document.createElement('div');
+      userMessageDiv.className = 'message sent';
+      userMessageDiv.textContent = question;
+      container.appendChild(userMessageDiv);
+      
+      input.value = '';
+      container.scrollTop = container.scrollHeight;
+
+      const loadingDiv = document.createElement('div');
+      loadingDiv.className = 'message received';
+      loadingDiv.innerHTML = '<span class="spinner"></span> Düşünüyorum...';
+      container.appendChild(loadingDiv);
+      container.scrollTop = container.scrollHeight;
+
+      try {
+        const wikiResponse = await fetch(`https://tr.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(question)}`);
+        
+        if (wikiResponse.ok) {
+          const wikiData = await wikiResponse.json();
+          loadingDiv.innerHTML = `<strong>${wikiData.title}</strong><br><br>${wikiData.extract || 'Bu konu hakkında bilgi bulunamadı.'}`;
+        } else {
+          const searchResponse = await fetch(`https://tr.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(question)}&limit=1&format=json&origin=*`);
+          
+          if (searchResponse.ok) {
+            const searchData = await searchResponse.json();
+            if (searchData[1] && searchData[1].length > 0) {
+              const title = searchData[1][0];
+              const summaryResponse = await fetch(`https://tr.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`);
+              
+              if (summaryResponse.ok) {
+                const summaryData = await summaryResponse.json();
+                loadingDiv.innerHTML = `<strong>${summaryData.title}</strong><br><br>${summaryData.extract || 'Bu konu hakkında bilgi bulunamadı.'}`;
+              } else {
+                loadingDiv.textContent = 'Üzgünüm, bu konu hakkında Wikipedia\'da bilgi bulamadım. 😔';
+              }
+            } else {
+              loadingDiv.textContent = 'Üzgünüm, bu konu hakkında Wikipedia\'da bilgi bulamadım. 😔';
+            }
+          } else {
+            loadingDiv.textContent = 'Wikipedia\'ya bağlanırken bir hata oluştu. 😔';
+          }
+        }
+      } catch (error) {
+        console.error('AI sorgu hatası:', error);
+        loadingDiv.textContent = 'Bir hata oluştu. Lütfen tekrar deneyin. 😔';
+      }
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    document.getElementById('logoutItem').addEventListener('click', logout);
+
+    document.querySelectorAll('.nav-item:not(.add-post)').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const page = btn.dataset.page;
+        
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(page + 'Page').classList.add('active');
+        document.getElementById('chatScreen').style.display = 'none';
+        activeChatUser = null;
+        
+        document.getElementById('notificationsPanel').classList.remove('active');
+
+        if (page === 'profile') {
+          loadMyPosts();
+        }
+      });
+    });
+
+    function formatTime(timestamp) {
+      if (!timestamp) return '��imdi';
+      
+      const date = new Date(timestamp);
+      const now = new Date();
+      const diff = Math.floor((now - date) / 1000);
+
+      if (diff < 60) return 'Az önce';
+      if (diff < 3600) return Math.floor(diff / 60) + 'd önce';
+      if (diff < 86400) return Math.floor(diff / 3600) + 's önce';
+      if (diff < 604800) return Math.floor(diff / 86400) + 'g önce';
+      return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+    }
+
+    console.log('🌱 AgroLink başlatılıyor...');
+    console.log('📡 API Endpoint:', API_BASE);
+    console.log('🔌 WebSocket Endpoint:', WS_BASE);
+
+    async function testAPIConnection() {
+      console.log('🔍 API bağlantısı test ediliyor...');
+      try {
+        const response = await fetch(`${API_BASE}/api/health`, {
+          method: 'GET',
+          mode: 'cors'
+        });
+        console.log('✅ API Durumu:', response.status, response.statusText);
+        return true;
+      } catch (error) {
+        console.error('❌ API Bağlantı Hatası:', error);
+        showToast('⚠️ Sunucu bağlantısı kurulamadı! Lütfen sunucunuzun çalıştığ��ndan emin olun.', 'error');
+        return false;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      testAPIConnection();
+      
+      setTimeout(() => {
+        document.getElementById('splashScreen').style.display = 'none';
+      }, 4000);
+
+      const savedToken = localStorage.getItem('agrolink_token');
+      const savedUser = localStorage.getItem('agrolink_user');
+      const savedTheme = localStorage.getItem('agrolink_theme');
+
+      if (savedToken && savedUser) {
+        authToken = savedToken;
+        currentUser = JSON.parse(savedUser);
+        
+        setTimeout(() => {
+          document.getElementById('loginScreen').classList.remove('active');
+          document.getElementById('mainApp').style.display = 'flex';
+          loadUserData();
+        }, 4000);
+      } else {
+        setTimeout(() => {
+          document.getElementById('loginScreen').classList.add('active');
+        }, 4000);
+      }
+
+      if (savedTheme) {
+        currentTheme = savedTheme;
+        document.body.className = currentTheme + '-theme';
+        if (currentTheme === 'dark') {
+          document.getElementById('themeSwitch').classList.add('active');
+        }
+      }
+
+      const savedLocation = localStorage.getItem('agrolink_location');
+      if (savedLocation === 'true') {
+        locationEnabled = true;
+        document.getElementById('locationSwitch').classList.add('active');
+      }
+
+      const savedNotifications = localStorage.getItem('agrolink_notifications');
+      if (savedNotifications === 'false') {
+        notificationsEnabled = false;
+        document.getElementById('notificationSwitch').classList.remove('active');
+      }
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a429bcd3257d5ff',t:'MTc2NDA4OTA0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
